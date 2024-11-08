@@ -68,3 +68,11 @@ export default defineConfig(({ command, mode, ssrBuild }) => {
 })
 
 ```
+
+
+npm 镜像配置：
+```
+源镜像： npm config set registry https://registry.npmjs.org/
+国内镜像：
+    npm set registry https://registry.npmmirror.com
+
