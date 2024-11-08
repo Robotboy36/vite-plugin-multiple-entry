@@ -2,7 +2,7 @@
   "name": "vite-plugin-multiple-entry",
   "version": "1.0.0",
   "description": "vite多页项目构建插件",
-  "main": "src/index.mjs",
+  "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

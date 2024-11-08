@@ -1,9 +1,8 @@
 
-import { readFileSync, writeFileSync, rmSync } from 'node:fs'
-import { resolve } from 'node:path';
-import history from 'connect-history-api-fallback'
-import { getHistoryReWriteRuleList, getPages } from './lib/utils.mjs';
-
+const { readFileSync, writeFileSync, rmSync } = require('node:fs')
+const { resolve } = require('node:path');
+const history = require('connect-history-api-fallback')
+const { getHistoryReWriteRuleList, getPages } = require('./lib/utils.js');
 
 /**
  * 多页面构建插件
@@ -118,4 +117,4 @@ function ViteMpaPlugin(userOptions = {}) {
     };
 }
 
-export default ViteMpaPlugin;
+module.exports = ViteMpaPlugin;

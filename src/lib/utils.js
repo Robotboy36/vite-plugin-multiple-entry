@@ -1,5 +1,5 @@
 
-import glob from 'glob';
+const glob = require('glob');
 
 /**
  * 从项目中提取页面
@@ -31,7 +31,7 @@ import glob from 'glob';
  * }
  * @returns 页面配置
  */
-export function getPages(pagePath) {
+function getPages(pagePath) {
     const pages = {};
     const files = glob.sync(`${pagePath}/**/*.html`, {})
     const baseUrl = /\/$/.test(pagePath) ? pagePath : pagePath + '/';
@@ -74,7 +74,7 @@ export function getPages(pagePath) {
  * 而按照我们的配置生产会生成在 dist/login.html
  * 如果我们需要像访问生产路径一样，在开发环境访问 /login.html， 则需要重写到 /src/pages/login.html
  */
-export function getHistoryReWriteRuleList(options) {
+function getHistoryReWriteRuleList(options) {
     const { rewrites } = options
     const list = rewrites
     // list.push({
@@ -103,4 +103,9 @@ export function getHistoryReWriteRuleList(options) {
 
     console.log('生成重定向配置', pages, list);
     return list
+}
+
+module.exports = {
+    getPages,
+    getHistoryReWriteRuleList,
 }
