@@ -77,10 +77,6 @@ function getPages(pagePath) {
 function getHistoryReWriteRuleList(options) {
     const { rewrites } = options
     const list = rewrites
-    // list.push({
-    //     from: /^\/$/,
-    //     to: `./${pageDir}`,
-    // })
     const pages = getPages(options.pageDir);
     const pageKeys = Object.keys(pages)
     // 针对文件夹模式，对路径进行排序
@@ -100,8 +96,6 @@ function getHistoryReWriteRuleList(options) {
             to: `/${pages[pageName]}`,
         });
     });
-
-    console.log('生成重定向配置', pages, list);
     return list
 }
 

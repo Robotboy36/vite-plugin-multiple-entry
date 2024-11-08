@@ -1,6 +1,6 @@
 {
   "name": "vite-plugin-multiple-entry",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "vite多页项目构建插件",
   "main": "src/index.js",
   "scripts": {
