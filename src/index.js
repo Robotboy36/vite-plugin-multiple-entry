@@ -93,7 +93,7 @@ function ViteMpaPlugin(userOptions = {}) {
         // closeBundle - 整个构建过程结束时调用。对于清理临时文件或者其他收尾工作很有帮助。
         // watchChange - 当监听模式下检测到文件变动时触发，可用于决定是否应该重新构建整个项目还是只更新特定部分。
         closeBundle() {
-            console.log('执行 vite-mpa-plugin');
+            // console.log('执行 vite-mpa-plugin');
             const outDir = resolvedConfig.build.outDir
             const lastPages = [];
 
