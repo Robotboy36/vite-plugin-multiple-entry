@@ -1,4 +1,5 @@
-# vite-plugin-pages
+# vite-plugin-multiple-entry
+
 vite 多页项目插件， 开箱即用
 
 ***
@@ -37,7 +38,7 @@ dist/
 ```
 
 vite.config.js 中使用
-```
+``` javascript
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import ViteMpaPlugin from 'vite-plugin-multiple-entry';
