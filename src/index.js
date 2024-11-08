@@ -1,5 +1,6 @@
 
-const { readFileSync, writeFileSync, rmSync } = require('node:fs')
+const { readFileSync, writeFileSync, rmSync, existsSync, mkdirSync } = require('node:fs')
+const { glob } = require('glob')
 const { resolve } = require('node:path');
 const history = require('connect-history-api-fallback')
 const { getHistoryReWriteRuleList, getPages } = require('./lib/utils.js');
@@ -14,15 +15,11 @@ const { getHistoryReWriteRuleList, getPages } = require('./lib/utils.js');
  */
 function ViteMpaPlugin(userOptions = {}) {
     const options = {
-        // 两种模式
-        // html: 直接生成html
-        // 例如 src/pages/login/index.html 将会得到 login.html
-        // src/pages/project/detail.html 将会得到 project_detail.html
-        // 
-        // path: 将会按路径生成（设想，暂未开发该功能）
-        // src/pages/login/index.html 将会得到 login/index.html
+        // 模式
+        // index: 直接生成 index.html
+        // 例如 src/pages/login/index.html 将会得到 login/index.html
         // src/pages/project/detail.html 将会得到 project/detail/index.html
-        mode: 'html',
+        mode: 'index',
         // 源代码页面放置路径
         pageDir: 'src/pages',
         // 静态资源存放路径，相对于 outDir
@@ -75,7 +72,6 @@ function ViteMpaPlugin(userOptions = {}) {
         /// 配置本地服务
         configureServer({ middlewares: app }) {
             app.use(
-                // @see https://github.com/vitejs/vite/blob/8733a83d291677b9aff9d7d78797ebb44196596e/packages/vite/src/node/server/index.ts#L433
                 history({
                     verbose: Boolean(process.env.DEBUG) && process.env.DEBUG !== 'false',
                     disableDotRule: undefined,
@@ -99,20 +95,31 @@ function ViteMpaPlugin(userOptions = {}) {
         closeBundle() {
             console.log('执行 vite-mpa-plugin');
             const outDir = resolvedConfig.build.outDir
-            const { assetsPath } = options;
+            const lastPages = [];
 
             // 循环将 dist/src/pages/login/index.html 文件复制到 dist/login.html
             // 并将文件中的静态资源路径替换成 文件迁移后的静态路径 或者 cdn之类的路径
             Object.keys(pages).forEach(pageName => {
                 const filepath = `${outDir}${pages[pageName]}`;
+                // console.log('读取文件路径', filepath);
                 // 读取文件内容
                 let content = readFileSync(filepath, { encoding: 'utf-8' });
-                content = content.replaceAll('../../../assets', assetsPath);
-                writeFileSync(resolve(`${outDir}${pageName}.html`), content, { encoding: 'utf-8' });
+                // 写入目标文件
+                // 先检测目录是否存在，去掉后面的 /index
+                if (pageName.indexOf('/') > -1) {
+                    const dir = `${outDir}${pageName.slice(0, -6)}`;
+                    if (!existsSync(dir)) {
+                        mkdirSync(dir, { recursive: true });
+                    }
+                }
+                const page = resolve(`${outDir}${pageName}.html`);
+                lastPages.push(`${pageName}.html`);
+                writeFileSync(page, content);
             });
 
             // 移除dist中的src
-            rmSync('dist/src', { force: true, recursive: true });
+            rmSync(`${outDir}/src`, { force: true, recursive: true });
+            console.log('最终生成的页面', lastPages);
         },
     };
 }

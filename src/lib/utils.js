@@ -1,34 +1,9 @@
 
-const glob = require('glob');
+const { glob } = require('glob')
 
 /**
  * 从项目中提取页面
  * 得到页面入口配置
- * 例如项目结构：
- * src
- *  - pages
- *      - login
- *          index.html
- *          index.js
- *          index.vue
- *      - home
- *          index.html
- *          index.js
- *          index.vue
- *      - project
- *          index.html
- *          index.js
- *          index.vue
- *          detail.html
- *          detail.js
- *          detail.vue
- * 将会得到：
- * {
- *      login: 'src/pages/login/index.html',
- *      home: 'src/pages/home/index.html',
- *      project: 'src/pages/project/index.html',
- *      project_detail: 'src/pages/project/detail.html',
- * }
  * @returns 页面配置
  */
 function getPages(pagePath) {
@@ -40,10 +15,11 @@ function getPages(pagePath) {
         const namepath = filepath.slice(0, -5).replace(baseUrl, '').split('/')
         const filename = namepath[0] === 'index' && namepath[0] === namepath[1] ? 'index' : namepath.join('/');
 
-        let entryName = namepath.join('_')
-        if (namepath[namepath.length - 1] === 'index') {
-            namepath.pop()
-            entryName = namepath.join('_');
+        let entryName = namepath.join('/')
+        // 非 index页面， 则增加路径，确保最终生成对应路径的index.html 
+        if (namepath[namepath.length - 1] !== 'index') {
+            namepath.push('index');
+            entryName = namepath.join('/');
         }
         // 模块名称
         // 如果是页面是index则默认去除
@@ -70,9 +46,9 @@ function getPages(pagePath) {
 /**
  * 重定向路径
  * 在开发环境中， 由于生成的页面会固定按照input原原本本的生成，所以和生产生成的文件路径是不一样的
- * 例如在开发环境中，登录页面会生成在 dist/src/pages/login.html
- * 而按照我们的配置生产会生成在 dist/login.html
- * 如果我们需要像访问生产路径一样，在开发环境访问 /login.html， 则需要重写到 /src/pages/login.html
+ * 例如在开发环境中，登录页面会生成在 dist/src/pages/login/index.html
+ * 而按照我们的配置生产会生成在 dist/login/index.html
+ * 如果我们需要像访问生产路径一样，在开发环境访问 /login/index.html， 则需要将其重写到 /src/pages/login/index.html
  */
 function getHistoryReWriteRuleList(options) {
     const { rewrites } = options
@@ -91,9 +67,14 @@ function getHistoryReWriteRuleList(options) {
     });
 
     pageKeys.forEach(pageName => {
+        const to = `/${pages[pageName]}`;
         list.push({
             from: `/${pageName}.html`,
-            to: `/${pages[pageName]}`,
+            to,
+        });
+        list.push({
+            from: `/${pageName.slice(0, -5)}`,
+            to,
         });
     });
     return list

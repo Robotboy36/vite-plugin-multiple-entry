@@ -31,10 +31,10 @@ dist/
         images/
         fonts/
         media/
-    login.html',
-    home.html',
-    project.html',
-    project_detail.html',
+    login/index.html',
+    home/index.html',
+    project/index.html',
+    project/detail/index.html',
 ```
 
 vite.config.js 中使用
@@ -47,7 +47,7 @@ import ViteMpaPlugin from 'vite-plugin-multiple-entry';
 export default defineConfig(({ command, mode, ssrBuild }) => {
     console.log('构建环境', command, mode);
     const config = {
-        base: mode === 'development' ? './' : '',
+        base: '/',
         productionSourceMap: false,
         integrity: true,
         crossorigin: 'anonymous',
