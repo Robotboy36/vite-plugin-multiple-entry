@@ -1,0 +1,31 @@
+{
+  "name": "vite-plugin-multiple-entry",
+  "version": "1.0.0",
+  "description": "vite多页项目构建插件",
+  "main": "src/index.mjs",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Robotboy36/vite-plugin-multiple-entry.git"
+  },
+  "keywords": [
+    "vite",
+    "mpa",
+    "vite-pages",
+    "pages",
+    "multiple-entry",
+    "vite-plugin-multiple-entry"
+  ],
+  "author": "robertboy",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Robotboy36/vite-plugin-multiple-entry/issues"
+  },
+  "homepage": "https://github.com/Robotboy36/vite-plugin-multiple-entry#readme",
+  "devDependencies": {
+    "connect-history-api-fallback": "^2.0.0",
+    "glob": "^11.0.0"
+  }
+}
