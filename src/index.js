@@ -25,6 +25,7 @@ function ViteMpaPlugin(userOptions = {}) {
         // 静态资源存放路径，相对于 outDir
         assetsPath: './assets',
         rewrites: [],
+        transformHtml: (html) => html,
         ...userOptions,
     }
     options.pageDir = /\/$/.test(options.pageDir) ? options.pageDir : options.pageDir + '/';
@@ -114,7 +115,7 @@ function ViteMpaPlugin(userOptions = {}) {
                 }
                 const page = resolve(`${outDir}${pageName}.html`);
                 lastPages.push(`${pageName}.html`);
-                writeFileSync(page, content);
+                writeFileSync(page, options.transformHtml ? options.transformHtml(content) : content);
             });
 
             // 移除dist中的src
